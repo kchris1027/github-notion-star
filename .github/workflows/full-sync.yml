@@ -8,14 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: notion-sync
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4  # 从 v2 升级到 v4
 
       - name: Setup environment
-        uses: actions/setup-node@v2.2.0
+        uses: actions/setup-node@v4  # 从 v2.2.0 升级到 v4
         with:
-          always-auth: false
           node-version: 16.x
-          cache: yarn
+          cache: 'yarn'  # 添加引号以确保正确解析
 
       - run: yarn
 
@@ -27,5 +26,5 @@ jobs:
           FULLSYNC_LIMIT: 2000
           PARTIALSYNC_LIMIT: 10
           REPO_TOPICS_LIMIT: 50
-          FULL_SYNC: true
+          FULL_SYNC: 'true'  # 添加引号以确保布尔值正确传递
         run: npm start
