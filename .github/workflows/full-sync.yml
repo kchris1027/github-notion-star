@@ -7,24 +7,27 @@ jobs:
   full-sync:
     runs-on: ubuntu-latest
     environment: notion-sync
+    env:  # 环境变量定义在作业级别
+      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+      TOKEN_OF_GITHUB: ${{ secrets.TOKEN_OF_GITHUB }}
+      FULLSYNC_LIMIT: 2000
+      PARTIALSYNC_LIMIT: 10
+      REPO_TOPICS_LIMIT: 50
+      FULL_SYNC: 'true'
     steps:
-      - uses: actions/checkout@v4  # 从 v2 升级到 v4
+      - uses: actions/checkout@v4
 
       - name: Setup environment
-        uses: actions/setup-node@v4  # 从 v2.2.0 升级到 v4
+        uses: actions/setup-node@v4
         with:
           node-version: 16.x
-          cache: 'yarn'  # 添加引号以确保正确解析
+          cache: 'yarn'
 
       - run: yarn
 
+      - name: Create cache directory
+        run: mkdir -p .cache && echo "{}" > .cache/notion-page.json
+
       - name: Run Full Sync
-        env:
-          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          TOKEN_OF_GITHUB: ${{ secrets.TOKEN_OF_GITHUB }}
-          FULLSYNC_LIMIT: 2000
-          PARTIALSYNC_LIMIT: 10
-          REPO_TOPICS_LIMIT: 50
-          FULL_SYNC: 'true'  # 添加引号以确保布尔值正确传递
         run: npm start
