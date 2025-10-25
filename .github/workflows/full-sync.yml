@@ -7,7 +7,7 @@ jobs:
   full-sync:
     runs-on: ubuntu-latest
     environment: notion-sync
-    env:  # 环境变量定义在作业级别
+    env:
       NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
       NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
       TOKEN_OF_GITHUB: ${{ secrets.TOKEN_OF_GITHUB }}
@@ -23,6 +23,12 @@ jobs:
         with:
           node-version: 16.x
           cache: 'yarn'
+
+      - name: Debug Environment Variables
+        run: |
+          echo "TOKEN_OF_GITHUB length: ${#TOKEN_OF_GITHUB}"
+          echo "NOTION_API_KEY length: ${#NOTION_API_KEY}"
+          echo "NOTION_DATABASE_ID: ${NOTION_DATABASE_ID}"
 
       - run: yarn
 
